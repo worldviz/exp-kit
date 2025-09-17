@@ -1,34 +1,35 @@
-# Tasks: [FEATURE NAME]
+# Tasks: [EXPERIMENT NAME]
 
-**Input**: Design documents from `/specs/[###-feature-name]/`
-**Prerequisites**: plan.md (required), research.md, data-model.md, contracts/
+**Input**: Design documents from `/specs/[###-experiment-name]/`
+**Prerequisites**: plan.md (required), research.md, protocols/, stimuli/, analysis-plan.md
 
 ## Execution Flow (main)
 ```
-1. Load plan.md from feature directory
+1. Load plan.md from experiment directory
    → If not found: ERROR "No implementation plan found"
-   → Extract: tech stack, libraries, structure
+   → Extract: VR platform (Vizard/Sightlab), dependencies
 2. Load optional design documents:
-   → data-model.md: Extract entities → model tasks
-   → contracts/: Each file → contract test task
-   → research.md: Extract decisions → setup tasks
+   → stimuli/: Extract 3D assets → asset preparation tasks
+   → protocols/: Each protocol → implementation task
+   → analysis-plan.md: Extract analyses → script tasks
 3. Generate tasks by category:
-   → Setup: project init, dependencies, linting
-   → Tests: contract tests, integration tests
-   → Core: models, services, CLI commands
-   → Integration: DB, middleware, logging
-   → Polish: unit tests, performance, docs
+   → Setup: Vizard environment, Sightlab config
+   → Stimuli: 3D models, textures, environments
+   → Core: Trial logic, randomization, data logging
+   → Testing: Pilot protocol, validation checks
+   → Analysis: Preprocessing, statistics, visualization
 4. Apply task rules:
-   → Different files = mark [P] for parallel
+   → Different modules = mark [P] for parallel
    → Same file = sequential (no [P])
-   → Tests before implementation (TDD)
+   → Hardware before software
+   → Stimuli before trials
 5. Number tasks sequentially (T001, T002...)
 6. Generate dependency graph
 7. Create parallel execution examples
 8. Validate task completeness:
-   → All contracts have tests?
-   → All entities have models?
-   → All endpoints implemented?
+   → All stimuli have loading tasks?
+   → All protocols implemented?
+   → All measures collected?
 9. Return: SUCCESS (tasks ready for execution)
 ```
 
@@ -37,91 +38,128 @@
 - Include exact file paths in descriptions
 
 ## Path Conventions
-- **Single project**: `src/`, `tests/` at repository root
-- **Web app**: `backend/src/`, `frontend/src/`
-- **Mobile**: `api/src/`, `ios/src/` or `android/src/`
-- Paths shown below assume single project - adjust based on plan.md structure
+- **Experiment code**: `src/experiment/`, `src/stimuli/`, `src/tracking/`
+- **Analysis code**: `src/analysis/`
+- **Test code**: `tests/unit/`, `tests/integration/`, `tests/pilot/`
+- **Data**: `data/raw/`, `data/processed/` (git-ignored)
 
-## Phase 3.1: Setup
-- [ ] T001 Create project structure per implementation plan
-- [ ] T002 Initialize [language] project with [framework] dependencies
-- [ ] T003 [P] Configure linting and formatting tools
+## Phase 3.1: Environment Setup
+- [ ] T001 Install Vizard 7 and verify license activation
+- [ ] T002 Install Sightlab 2.0 and configure for experiment type
+- [ ] T003 [P] Set up Python virtual environment with dependencies
+- [ ] T004 [P] Configure VR hardware (HMD, trackers, controllers)
+- [ ] T005 Test VR tracking space and boundaries
 
-## Phase 3.2: Tests First (TDD) ⚠️ MUST COMPLETE BEFORE 3.3
-**CRITICAL: These tests MUST be written and MUST FAIL before ANY implementation**
-- [ ] T004 [P] Contract test POST /api/users in tests/contract/test_users_post.py
-- [ ] T005 [P] Contract test GET /api/users/{id} in tests/contract/test_users_get.py
-- [ ] T006 [P] Integration test user registration in tests/integration/test_registration.py
-- [ ] T007 [P] Integration test auth flow in tests/integration/test_auth.py
+## Phase 3.2: Stimulus Preparation
+- [ ] T006 [P] Create/import 3D models in src/stimuli/assets/models/
+- [ ] T007 [P] Design textures/materials in src/stimuli/assets/textures/
+- [ ] T008 [P] Build virtual environment in src/stimuli/assets/environments/
+- [ ] T009 Implement stimulus loader in src/stimuli/loader.py
+- [ ] T010 Create stimulus generator for dynamic content in src/stimuli/generator.py
+- [ ] T011 Test stimulus presentation timing and rendering
 
-## Phase 3.3: Core Implementation (ONLY after tests are failing)
-- [ ] T008 [P] User model in src/models/user.py
-- [ ] T009 [P] UserService CRUD in src/services/user_service.py
-- [ ] T010 [P] CLI --create-user in src/cli/user_commands.py
-- [ ] T011 POST /api/users endpoint
-- [ ] T012 GET /api/users/{id} endpoint
-- [ ] T013 Input validation
-- [ ] T014 Error handling and logging
+## Phase 3.3: Core Experiment Implementation
+- [ ] T012 Define experiment configuration in src/experiment/config.py
+- [ ] T013 Implement trial logic in src/experiment/trials.py
+- [ ] T014 Create main experiment loop in src/experiment/main.py
+- [ ] T015 [P] Implement randomization/counterbalancing
+- [ ] T016 [P] Add instruction screens and participant prompts
+- [ ] T017 Create practice trial sequence
+- [ ] T018 Implement break/pause functionality
 
-## Phase 3.4: Integration
-- [ ] T015 Connect UserService to DB
-- [ ] T016 Auth middleware
-- [ ] T017 Request/response logging
-- [ ] T018 CORS and security headers
+## Phase 3.4: Tracking & Data Collection
+- [ ] T019 [P] Set up eye tracking in src/tracking/eye_tracker.py
+- [ ] T020 [P] Configure motion tracking in src/tracking/motion.py
+- [ ] T021 [P] Implement physiological monitoring in src/tracking/physio.py (if applicable)
+- [ ] T022 Create data logger in src/data/logger.py
+- [ ] T023 Implement real-time validation in src/data/validator.py
+- [ ] T024 Add data export functionality in src/data/export.py
+- [ ] T025 Test data integrity and backup procedures
 
-## Phase 3.5: Polish
-- [ ] T019 [P] Unit tests for validation in tests/unit/test_validation.py
-- [ ] T020 Performance tests (<200ms)
-- [ ] T021 [P] Update docs/api.md
-- [ ] T022 Remove duplication
-- [ ] T023 Run manual-testing.md
+## Phase 3.5: Calibration & Quality Control
+- [ ] T026 Create eye tracking calibration routine
+- [ ] T027 Implement position tracking verification
+- [ ] T028 Add participant comfort checks (IPD, height adjustment)
+- [ ] T029 Create pre-experiment hardware tests
+- [ ] T030 Implement cybersickness monitoring
+
+## Phase 3.6: Pilot Testing Protocol
+- [ ] T031 Create pilot participant consent forms
+- [ ] T032 Run pilot test with 3 lab members
+- [ ] T033 Analyze pilot data for timing issues
+- [ ] T034 Check data completeness and quality
+- [ ] T035 Refine based on pilot feedback
+- [ ] T036 Document known issues and solutions
+
+## Phase 3.7: Analysis Pipeline
+- [ ] T037 [P] Implement data preprocessing in src/analysis/preprocess.py
+- [ ] T038 [P] Create statistical tests in src/analysis/statistics.py
+- [ ] T039 [P] Build visualization scripts in src/analysis/visualize.py
+- [ ] T040 Generate power analysis validation
+- [ ] T041 Create automated analysis report template
+- [ ] T042 Test analysis pipeline with simulated data
+
+## Phase 3.8: Documentation & Deployment
+- [ ] T043 [P] Write participant instruction guide
+- [ ] T044 [P] Create experimenter protocol document
+- [ ] T045 [P] Document troubleshooting procedures
+- [ ] T046 Prepare IRB submission materials
+- [ ] T047 Set up data backup and versioning
+- [ ] T048 Create experiment preregistration
 
 ## Dependencies
-- Tests (T004-T007) before implementation (T008-T014)
-- T008 blocks T009, T015
-- T016 blocks T018
-- Implementation before polish (T019-T023)
+- Environment (T001-T005) before all implementation
+- Stimuli (T006-T011) before trials (T012-T018)
+- Core implementation before tracking (T019-T025)
+- Calibration (T026-T030) requires tracking
+- Pilot testing (T031-T036) requires full implementation
+- Analysis (T037-T042) can parallel documentation (T043-T048)
 
 ## Parallel Example
 ```
-# Launch T004-T007 together:
-Task: "Contract test POST /api/users in tests/contract/test_users_post.py"
-Task: "Contract test GET /api/users/{id} in tests/contract/test_users_get.py"
-Task: "Integration test registration in tests/integration/test_registration.py"
-Task: "Integration test auth in tests/integration/test_auth.py"
+# Launch T006-T008 together (different asset types):
+Task: "Create 3D models in src/stimuli/assets/models/"
+Task: "Design textures in src/stimuli/assets/textures/"
+Task: "Build environment in src/stimuli/assets/environments/"
+
+# Launch T037-T039 together (independent analysis scripts):
+Task: "Implement preprocessing in src/analysis/preprocess.py"
+Task: "Create statistical tests in src/analysis/statistics.py"
+Task: "Build visualizations in src/analysis/visualize.py"
 ```
 
 ## Notes
-- [P] tasks = different files, no dependencies
-- Verify tests fail before implementing
-- Commit after each task
-- Avoid: vague tasks, same file conflicts
+- [P] tasks = independent modules, no shared dependencies
+- Test each component before integration
+- Maintain experiment log for issues/solutions
+- Version control all configuration changes
 
 ## Task Generation Rules
 *Applied during main() execution*
 
-1. **From Contracts**:
-   - Each contract file → contract test task [P]
-   - Each endpoint → implementation task
-   
-2. **From Data Model**:
-   - Each entity → model creation task [P]
-   - Relationships → service layer tasks
-   
-3. **From User Stories**:
-   - Each story → integration test [P]
-   - Quickstart scenarios → validation tasks
+1. **From Stimuli Specs**:
+   - Each stimulus type → preparation task [P]
+   - Complex stimuli → generator implementation
+
+2. **From Protocols**:
+   - Each protocol phase → implementation task
+   - Contingencies → error handling tasks
+
+3. **From Analysis Plan**:
+   - Each statistical test → analysis task [P]
+   - Each figure → visualization task [P]
 
 4. **Ordering**:
-   - Setup → Tests → Models → Services → Endpoints → Polish
-   - Dependencies block parallel execution
+   - Hardware → Software → Stimuli → Logic → Testing → Analysis
+   - Respect Vizard/Sightlab dependencies
 
 ## Validation Checklist
 *GATE: Checked by main() before returning*
 
-- [ ] All contracts have corresponding tests
-- [ ] All entities have model tasks
-- [ ] All tests come before implementation
-- [ ] Parallel tasks truly independent
+- [ ] All stimuli have preparation tasks
+- [ ] All protocols have implementation tasks
+- [ ] All measures have collection tasks
+- [ ] Pilot testing included before full deployment
 - [ ] Each task specifies exact file path
-- [ ] No task modifies same file as another [P] task
+- [ ] Parallel tasks truly independent
+- [ ] Vizard/Sightlab compatibility verified

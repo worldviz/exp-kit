@@ -1,200 +1,223 @@
 ---
-description: "Implementation plan template for feature development"
+description: "Implementation plan template for VR experiment development"
 scripts:
   sh: scripts/bash/update-agent-context.sh __AGENT__
   ps: scripts/powershell/update-agent-context.ps1 -AgentType __AGENT__
 ---
 
-# Implementation Plan: [FEATURE]
+# Implementation Plan: [EXPERIMENT]
 
-**Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
-**Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
+**Branch**: `[###-experiment-name]` | **Date**: [DATE] | **Spec**: [link]
+**Input**: Experiment specification from `/specs/[###-experiment-name]/spec.md`
 
 ## Execution Flow (/plan command scope)
 ```
-1. Load feature spec from Input path
-   → If not found: ERROR "No feature spec at {path}"
+1. Load experiment spec from Input path
+   → If not found: ERROR "No experiment spec at {path}"
 2. Fill Technical Context (scan for NEEDS CLARIFICATION)
-   → Detect Project Type from context (web=frontend+backend, mobile=app+api)
-   → Set Structure Decision based on project type
-3. Fill the Constitution Check section based on the content of the constitution document.
-4. Evaluate Constitution Check section below
+   → Set VR Platform: Vizard + Sightlab
+   → Detect Experiment Type (behavioral, psychophysics, social)
+   → Set Structure Decision based on experiment type
+3. Fill the Constitution Check section based on experimental best practices
+4. Evaluate Constitution Check section
    → If violations exist: Document in Complexity Tracking
-   → If no justification possible: ERROR "Simplify approach first"
+   → If no justification possible: ERROR "Simplify design first"
    → Update Progress Tracking: Initial Constitution Check
-5. Execute Phase 0 → research.md
-   → If NEEDS CLARIFICATION remain: ERROR "Resolve unknowns"
-6. Execute Phase 1 → contracts, data-model.md, quickstart.md, agent-specific template file (e.g., `CLAUDE.md` for Claude Code, `.github/copilot-instructions.md` for GitHub Copilot, `GEMINI.md` for Gemini CLI, or `QWEN.md` for Qwen Code).
-7. Re-evaluate Constitution Check section
+5. Execute Phase 0 → research.md (literature review, paradigm selection)
+   → If NEEDS CLARIFICATION remain: ERROR "Resolve design questions"
+6. Execute Phase 1 → stimuli/, protocols/, analysis-plan.md, quickstart.md
+7. Re-evaluate Constitution Check
    → If new violations: Refactor design, return to Phase 1
    → Update Progress Tracking: Post-Design Constitution Check
 8. Plan Phase 2 → Describe task generation approach (DO NOT create tasks.md)
 9. STOP - Ready for /tasks command
 ```
 
-**IMPORTANT**: The /plan command STOPS at step 7. Phases 2-4 are executed by other commands:
-- Phase 2: /tasks command creates tasks.md
-- Phase 3-4: Implementation execution (manual or via tools)
+**IMPORTANT**: The /plan command STOPS at step 8. Phase 2 is executed by /tasks command.
 
 ## Summary
-[Extract from feature spec: primary requirement + technical approach from research]
+[Extract from experiment spec: primary hypothesis + experimental approach from research]
 
 ## Technical Context
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
-**Project Type**: [single/web/mobile - determines source structure]  
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
-**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
+**VR Platform**: Vizard 7 + Sightlab 2.0
+**Python Version**: 3.11+ (Vizard compatible)
+**Primary Dependencies**: vizard, sightlab, numpy, pandas, scipy
+**Data Storage**: [CSV/HDF5/SQLite or NEEDS CLARIFICATION]
+**Analysis Tools**: [R/Python/JASP or NEEDS CLARIFICATION]
+**VR Hardware**: [HMD model, tracking system or NEEDS CLARIFICATION]
+**Experiment Type**: [behavioral/psychophysics/social/cognitive]
+**Trial Structure**: [blocks × trials or NEEDS CLARIFICATION]
+**Session Duration**: [minutes or NEEDS CLARIFICATION]
+**Sample Size**: [N participants or NEEDS CLARIFICATION]
 
 ## Constitution Check
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+*GATE: Must pass experimental best practices before Phase 0*
 
-[Gates determined based on constitution file]
+### Scientific Integrity
+- [ ] **Preregistration Ready**: Hypotheses, design, analysis plan locked
+- [ ] **Power Adequate**: Sample size justified by power analysis
+- [ ] **Validity Ensured**: Internal, external, construct validity addressed
+- [ ] **Replicable**: Protocol sufficiently detailed for replication
+
+### Ethical Standards
+- [ ] **IRB Compliant**: Protocol aligns with ethics approval
+- [ ] **Participant Safety**: VR comfort, breaks, stopping rules defined
+- [ ] **Data Protection**: GDPR/HIPAA compliant storage and handling
+- [ ] **Informed Consent**: Clear, comprehensive consent procedures
+
+### Technical Rigor
+- [ ] **Randomization**: Proper randomization/counterbalancing implemented
+- [ ] **Timing Precision**: Frame-accurate presentation and response recording
+- [ ] **Calibration**: Eye tracking, position tracking calibrated per participant
+- [ ] **Data Quality**: Validation checks, outlier detection automated
 
 ## Project Structure
 
-### Documentation (this feature)
+### Documentation (this experiment)
 ```
-specs/[###-feature]/
+specs/[###-experiment]/
 ├── plan.md              # This file (/plan command output)
-├── research.md          # Phase 0 output (/plan command)
-├── data-model.md        # Phase 1 output (/plan command)
-├── quickstart.md        # Phase 1 output (/plan command)
-├── contracts/           # Phase 1 output (/plan command)
-└── tasks.md             # Phase 2 output (/tasks command - NOT created by /plan)
+├── research.md          # Phase 0: Literature review, paradigm selection
+├── protocols/           # Phase 1: Detailed experimental procedures
+│   ├── main-task.md
+│   ├── practice.md
+│   └── calibration.md
+├── stimuli/             # Phase 1: Stimulus specifications
+│   ├── visual/
+│   ├── audio/
+│   └── environments/
+├── analysis-plan.md     # Phase 1: Statistical analysis pipeline
+├── quickstart.md        # Phase 1: Pilot testing protocol
+└── tasks.md             # Phase 2: Development tasks (/tasks command)
 ```
 
 ### Source Code (repository root)
 ```
-# Option 1: Single project (DEFAULT)
+# VR Experiment Structure
 src/
-├── models/
-├── services/
-├── cli/
-└── lib/
+├── experiment/
+│   ├── __init__.py
+│   ├── config.py        # Experiment parameters
+│   ├── main.py          # Main experiment loop
+│   └── trials.py        # Trial logic
+├── stimuli/
+│   ├── loader.py        # Stimulus loading/caching
+│   ├── generator.py     # Dynamic stimulus generation
+│   └── assets/          # 3D models, textures
+├── tracking/
+│   ├── eye_tracker.py   # Eye tracking integration
+│   ├── motion.py        # Motion capture
+│   └── physio.py        # Physiological measures
+├── data/
+│   ├── logger.py        # Data collection
+│   ├── validator.py     # Real-time validation
+│   └── export.py        # Data export formats
+└── analysis/
+    ├── preprocess.py    # Data cleaning
+    ├── statistics.py    # Statistical tests
+    └── visualize.py     # Plots and figures
 
 tests/
-├── contract/
-├── integration/
-└── unit/
+├── unit/                # Component tests
+├── integration/         # System tests
+└── pilot/               # Pilot participant data
 
-# Option 2: Web application (when "frontend" + "backend" detected)
-backend/
-├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
-└── tests/
-
-frontend/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   └── services/
-└── tests/
-
-# Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
-
-ios/ or android/
-└── [platform-specific structure]
+data/                    # Experimental data (git-ignored)
+├── raw/
+├── processed/
+└── figures/
 ```
 
-**Structure Decision**: [DEFAULT to Option 1 unless Technical Context indicates web/mobile app]
+**Structure Decision**: [Based on experiment type from Technical Context]
 
-## Phase 0: Outline & Research
-1. **Extract unknowns from Technical Context** above:
-   - For each NEEDS CLARIFICATION → research task
-   - For each dependency → best practices task
-   - For each integration → patterns task
+## Phase 0: Literature & Paradigm Research
+1. **Review prior VR experiments** in domain:
+   - Search for: "{construct} VR experiment"
+   - Search for: "{paradigm} virtual reality"
+   - Extract: Effect sizes, sample sizes, procedures
 
-2. **Generate and dispatch research agents**:
-   ```
-   For each unknown in Technical Context:
-     Task: "Research {unknown} for {feature context}"
-   For each technology choice:
-     Task: "Find best practices for {tech} in {domain}"
-   ```
+2. **Paradigm selection** based on:
+   - Ecological validity vs. experimental control
+   - VR affordances (3D space, embodiment, presence)
+   - Participant comfort and cybersickness
 
-3. **Consolidate findings** in `research.md` using format:
-   - Decision: [what was chosen]
-   - Rationale: [why chosen]
-   - Alternatives considered: [what else evaluated]
+3. **Technical feasibility** research:
+   - Vizard/Sightlab examples for paradigm
+   - Required tracking precision
+   - Stimulus presentation timing
 
-**Output**: research.md with all NEEDS CLARIFICATION resolved
+**Output**: research.md with paradigm justification and technical approach
 
-## Phase 1: Design & Contracts
+## Phase 1: Experiment Design & Protocols
 *Prerequisites: research.md complete*
 
-1. **Extract entities from feature spec** → `data-model.md`:
-   - Entity name, fields, relationships
-   - Validation rules from requirements
-   - State transitions if applicable
+1. **Generate stimulus specifications** → `stimuli/`:
+   - 3D model requirements
+   - Texture/material properties
+   - Animation parameters
+   - Environmental layout
 
-2. **Generate API contracts** from functional requirements:
-   - For each user action → endpoint
-   - Use standard REST/GraphQL patterns
-   - Output OpenAPI/GraphQL schema to `/contracts/`
+2. **Create detailed protocols** → `protocols/`:
+   - Instruction scripts
+   - Practice trial sequence
+   - Main experiment flow
+   - Contingency procedures
 
-3. **Generate contract tests** from contracts:
-   - One test file per endpoint
-   - Assert request/response schemas
-   - Tests must fail (no implementation yet)
+3. **Design data structures** → `analysis-plan.md`:
+   - Variable naming conventions
+   - Data validation rules
+   - Statistical test specifications
+   - Figure generation plans
 
-4. **Extract test scenarios** from user stories:
-   - Each story → integration test scenario
-   - Quickstart test = story validation steps
+4. **Pilot testing protocol** → `quickstart.md`:
+   - Setup checklist
+   - Calibration procedures
+   - Test run instructions
+   - Troubleshooting guide
 
-5. **Update agent file incrementally** (O(1) operation):
-   - Run `{SCRIPT}` for your AI assistant
-   - If exists: Add only NEW tech from current plan
-   - Preserve manual additions between markers
-   - Update recent changes (keep last 3)
-   - Keep under 150 lines for token efficiency
-   - Output to repository root
+5. **Update agent file** (if applicable):
+   - Add Vizard/Sightlab context
+   - Include experiment-specific guidance
+   - Update with recent design decisions
 
-**Output**: data-model.md, /contracts/*, failing tests, quickstart.md, agent-specific file
+**Output**: stimuli/, protocols/, analysis-plan.md, quickstart.md
 
 ## Phase 2: Task Planning Approach
-*This section describes what the /tasks command will do - DO NOT execute during /plan*
+*This section describes what /tasks command will do - DO NOT execute during /plan*
 
 **Task Generation Strategy**:
-- Load `.specify/templates/tasks-template.md` as base
-- Generate tasks from Phase 1 design docs (contracts, data model, quickstart)
-- Each contract → contract test task [P]
-- Each entity → model creation task [P] 
-- Each user story → integration test task
-- Implementation tasks to make tests pass
+- Environment setup tasks (VR scene, lighting)
+- Stimulus preparation tasks (3D assets, materials)
+- Core experiment logic (trial control, randomization)
+- Data collection implementation
+- Pilot testing tasks
+- Analysis script development
 
 **Ordering Strategy**:
-- TDD order: Tests before implementation 
-- Dependency order: Models before services before UI
-- Mark [P] for parallel execution (independent files)
+- Hardware setup before software
+- Stimuli before trial logic
+- Core experiment before data collection
+- Testing before analysis
 
-**Estimated Output**: 25-30 numbered, ordered tasks in tasks.md
+**Estimated Output**: 30-40 numbered tasks in tasks.md
 
-**IMPORTANT**: This phase is executed by the /tasks command, NOT by /plan
+**IMPORTANT**: Phase 2 is executed by /tasks command, NOT by /plan
 
 ## Phase 3+: Future Implementation
 *These phases are beyond the scope of the /plan command*
 
-**Phase 3**: Task execution (/tasks command creates tasks.md)  
-**Phase 4**: Implementation (execute tasks.md following constitutional principles)  
-**Phase 5**: Validation (run tests, execute quickstart.md, performance validation)
+**Phase 3**: Task execution (development sprints)
+**Phase 4**: Pilot testing (5-10 participants)
+**Phase 5**: Refinement based on pilot data
+**Phase 6**: Full data collection
+**Phase 7**: Analysis and publication
 
 ## Complexity Tracking
 *Fill ONLY if Constitution Check has violations that must be justified*
 
 | Violation | Why Needed | Simpler Alternative Rejected Because |
 |-----------|------------|-------------------------------------|
-| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
-| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |
-
+| [e.g., Complex randomization] | [counterbalancing need] | [would introduce confounds] |
 
 ## Progress Tracking
 *This checklist is updated during execution flow*
@@ -204,8 +227,7 @@ ios/ or android/
 - [ ] Phase 1: Design complete (/plan command)
 - [ ] Phase 2: Task planning complete (/plan command - describe approach only)
 - [ ] Phase 3: Tasks generated (/tasks command)
-- [ ] Phase 4: Implementation complete
-- [ ] Phase 5: Validation passed
+- [ ] Phase 4-7: Implementation and data collection
 
 **Gate Status**:
 - [ ] Initial Constitution Check: PASS
@@ -214,4 +236,4 @@ ios/ or android/
 - [ ] Complexity deviations documented
 
 ---
-*Based on Constitution v2.1.1 - See `/memory/constitution.md`*
+*Based on Experimental Psychology Best Practices - See `/memory/constitution.md`*

@@ -10,16 +10,16 @@
 # ]
 # ///
 """
-Specify CLI - Setup tool for Specify projects
+ExpKit CLI - Setup tool for Experimental Psychology projects
 
 Usage:
-    uvx specify-cli.py init <project-name>
-    uvx specify-cli.py init --here
+    uvx expkit-cli.py init <project-name>
+    uvx expkit-cli.py init --here
 
 Or install globally:
-    uv tool install --from specify-cli.py specify-cli
-    specify init <project-name>
-    specify init --here
+    uv tool install --from expkit-cli.py expkit-cli
+    expkit init <project-name>
+    expkit init --here
 """
 
 import os
@@ -68,15 +68,15 @@ CLAUDE_LOCAL_PATH = Path.home() / ".claude" / "local" / "claude"
 
 # ASCII Art Banner
 BANNER = """
-███████╗██████╗ ███████╗ ██████╗██╗███████╗██╗   ██╗
-██╔════╝██╔══██╗██╔════╝██╔════╝██║██╔════╝╚██╗ ██╔╝
-███████╗██████╔╝█████╗  ██║     ██║█████╗   ╚████╔╝ 
-╚════██║██╔═══╝ ██╔══╝  ██║     ██║██╔══╝    ╚██╔╝  
-███████║██║     ███████╗╚██████╗██║██║        ██║   
-╚══════╝╚═╝     ╚══════╝ ╚═════╝╚═╝╚═╝        ╚═╝   
+███████╗██╗  ██╗██████╗       ██╗  ██╗██╗████████╗
+██╔════╝╚██╗██╔╝██╔══██╗      ██║ ██╔╝██║╚══██╔══╝
+█████╗   ╚███╔╝ ██████╔╝█████╗█████╔╝ ██║   ██║
+██╔══╝   ██╔██╗ ██╔═══╝ ╚════╝██╔═██╗ ██║   ██║
+███████╗██╔╝ ██╗██║           ██║  ██╗██║   ██║
+╚══════╝╚═╝  ╚═╝╚═╝           ╚═╝  ╚═╝╚═╝   ╚═╝
 """
 
-TAGLINE = "Spec-Driven Development Toolkit"
+TAGLINE = "Experimental Psychology VR Toolkit"
 class StepTracker:
     """Track and render hierarchical steps without emojis, similar to Claude Code tree output.
     Supports live auto-refresh via an attached refresh callback.
@@ -166,9 +166,9 @@ class StepTracker:
 
 
 MINI_BANNER = """
-╔═╗╔═╗╔═╗╔═╗╦╔═╗╦ ╦
-╚═╗╠═╝║╣ ║  ║╠╣ ╚╦╝
-╚═╝╩  ╚═╝╚═╝╩╚   ╩ 
+╔═╗═╗ ╦╔═╗  ╦╔═╦╔╦╗
+║╣ ╔╩╦╝╠═╝  ╠╩╗║ ║
+╚═╝╩ ╚═╩    ╩ ╩╩ ╩
 """
 
 def get_key():
@@ -288,8 +288,8 @@ class BannerGroup(TyperGroup):
 
 
 app = typer.Typer(
-    name="specify",
-    help="Setup tool for Specify spec-driven development projects",
+    name="expkit",
+    help="Setup tool for Experimental Psychology VR projects",
     add_completion=False,
     invoke_without_command=True,
     cls=BannerGroup,
@@ -319,7 +319,7 @@ def callback(ctx: typer.Context):
     # (help is handled by BannerGroup)
     if ctx.invoked_subcommand is None and "--help" not in sys.argv and "-h" not in sys.argv:
         show_banner()
-        console.print(Align.center("[dim]Run 'specify --help' for usage information[/dim]"))
+        console.print(Align.center("[dim]Run 'expkit --help' for usage information[/dim]"))
         console.print()
 
 
@@ -418,8 +418,8 @@ def init_git_repo(project_path: Path, quiet: bool = False) -> bool:
 
 
 def download_template_from_github(ai_assistant: str, download_dir: Path, *, script_type: str = "sh", verbose: bool = True, show_progress: bool = True, client: httpx.Client = None, debug: bool = False) -> Tuple[Path, dict]:
-    repo_owner = "github"
-    repo_name = "spec-kit"
+    repo_owner = "worldviz"
+    repo_name = "exp-kit"
     if client is None:
         client = httpx.Client(verify=ssl_context)
     
@@ -445,7 +445,7 @@ def download_template_from_github(ai_assistant: str, download_dir: Path, *, scri
         raise typer.Exit(1)
     
     # Find the template asset for the specified AI assistant
-    pattern = f"spec-kit-template-{ai_assistant}-{script_type}"
+    pattern = f"exp-kit-template-{ai_assistant}-{script_type}"
     matching_assets = [
         asset for asset in release_data.get("assets", [])
         if pattern in asset["name"] and asset["name"].endswith(".zip")
@@ -732,7 +732,7 @@ def init(
     debug: bool = typer.Option(False, "--debug", help="Show verbose diagnostic output for network and extraction failures"),
 ):
     """
-    Initialize a new Specify project from the latest template.
+    Initialize a new ExpKit project from the latest template.
     
     This command will:
     1. Check that required tools are installed (git is optional)
@@ -743,15 +743,15 @@ def init(
     6. Optionally set up AI assistant commands
     
     Examples:
-        specify init my-project
-        specify init my-project --ai claude
-        specify init my-project --ai gemini
-        specify init my-project --ai copilot --no-git
-        specify init my-project --ai cursor
-        specify init my-project --ai qwen
-        specify init --ignore-agent-tools my-project
-        specify init --here --ai claude
-        specify init --here
+        expkit init my-experiment
+        expkit init my-experiment --ai claude
+        expkit init my-experiment --ai gemini
+        expkit init my-experiment --ai copilot --no-git
+        expkit init my-experiment --ai cursor
+        expkit init my-experiment --ai qwen
+        expkit init --ignore-agent-tools my-experiment
+        expkit init --here --ai claude
+        expkit init --here
     """
     # Show banner first
     show_banner()
@@ -789,7 +789,7 @@ def init(
             raise typer.Exit(1)
     
     console.print(Panel.fit(
-        "[bold cyan]Specify Project Setup[/bold cyan]\n"
+        "[bold cyan]ExpKit Project Setup[/bold cyan]\n"
         f"{'Initializing in current directory:' if here else 'Creating new project:'} [green]{project_path.name}[/green]"
         + (f"\n[dim]Path: {project_path}[/dim]" if here else ""),
         border_style="cyan"
@@ -859,7 +859,7 @@ def init(
     
     # Download and set up project
     # New tree-based progress (no emojis); include earlier substeps
-    tracker = StepTracker("Initialize Specify Project")
+    tracker = StepTracker("Initialize ExpKit Project")
     # Flag to allow suppressing legacy headings
     sys._specify_tracker_active = True
     # Pre steps recorded as completed before live rendering
@@ -947,20 +947,21 @@ def init(
     if selected_ai == "claude":
         steps_lines.append(f"{step_num}. Open in Visual Studio Code and start using / commands with Claude Code")
         steps_lines.append("   - Type / in any file to see available commands")
-        steps_lines.append("   - Use /specify to create specifications")
+        steps_lines.append("   - Use /specify to design your experiment")
         steps_lines.append("   - Use /plan to create implementation plans")
         steps_lines.append("   - Use /tasks to generate tasks")
     elif selected_ai == "gemini":
         steps_lines.append(f"{step_num}. Use / commands with Gemini CLI")
-        steps_lines.append("   - Run gemini /specify to create specifications")
+        steps_lines.append("   - Run gemini /specify to design your experiment")
         steps_lines.append("   - Run gemini /plan to create implementation plans")
         steps_lines.append("   - Run gemini /tasks to generate tasks")
         steps_lines.append("   - See GEMINI.md for all available commands")
     elif selected_ai == "copilot":
         steps_lines.append(f"{step_num}. Open in Visual Studio Code and use [bold cyan]/specify[/], [bold cyan]/plan[/], [bold cyan]/tasks[/] commands with GitHub Copilot")
+        steps_lines.append("   - Use /specify to design your experiment")
     elif selected_ai == "qwen":
         steps_lines.append(f"{step_num}. Use / commands with Qwen CLI")
-        steps_lines.append("   - Run qwen /specify to create specifications")
+        steps_lines.append("   - Run qwen /specify to design your experiment")
         steps_lines.append("   - Run qwen /plan to create implementation plans")
         steps_lines.append("   - Run qwen /tasks to generate tasks")
         steps_lines.append("   - See QWEN.md for all available commands")
@@ -1008,7 +1009,7 @@ def check():
     console.print(tracker.render())
     
     # Summary
-    console.print("\n[bold green]Specify CLI is ready to use![/bold green]")
+    console.print("\n[bold green]ExpKit CLI is ready to use![/bold green]")
     
     # Recommendations
     if not git_ok:
