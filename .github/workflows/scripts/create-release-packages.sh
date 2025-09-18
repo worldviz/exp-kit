@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # create-release-packages.sh (workflow-local)
-# Build Spec Kit template release archives for each supported AI assistant and script type.
+# Build ExpKit template release archives for each supported AI assistant and script type.
 # Usage: .github/workflows/scripts/create-release-packages.sh <version>
 #   Version argument should include leading 'v'.
 #   Optionally set AGENTS and/or SCRIPTS env vars to limit what gets built.
@@ -25,7 +25,7 @@ fi
 
 echo "Building release packages for $NEW_VERSION"
 
-rm -rf sdd-package-base* sdd-*-package-* spec-kit-template-*-${NEW_VERSION}.zip || true
+rm -rf sdd-package-base* sdd-*-package-* exp-kit-template-*-${NEW_VERSION}.zip || true
 
 rewrite_paths() {
   sed -E \
@@ -148,8 +148,8 @@ build_variant() {
       generate_commands qwen md "\$ARGUMENTS" "$base_dir/.qwen/commands" "$script"
       [[ -f agent_templates/qwen/QWEN.md ]] && cp agent_templates/qwen/QWEN.md "$base_dir/QWEN.md" ;;
   esac
-  ( cd "$base_dir" && zip -r "../spec-kit-template-${agent}-${script}-${NEW_VERSION}.zip" . )
-  echo "Created spec-kit-template-${agent}-${script}-${NEW_VERSION}.zip"
+  ( cd "$base_dir" && zip -r "../exp-kit-template-${agent}-${script}-${NEW_VERSION}.zip" . )
+  echo "Created exp-kit-template-${agent}-${script}-${NEW_VERSION}.zip"
 }
 
 # Determine agent list
@@ -199,4 +199,4 @@ for agent in "${AGENT_LIST[@]}"; do
 done
 
 echo "Archives:"
-ls -1 spec-kit-template-*-${NEW_VERSION}.zip
+ls -1 exp-kit-template-*-${NEW_VERSION}.zip
